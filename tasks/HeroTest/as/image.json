@@ -110,20 +110,20 @@
   {
     "itemName": "bcmj_skill_add1",
     "imageName": "as_bcmj_skill_add1.png",
-    "roiFront": "109,361,90,32",
+    "roiFront": "1110,361,67,32",
     "roiBack": "103,359,1076,37",
     "method": "Template matching",
     "threshold": 0.8,
-    "description": "兵藏秘境选择八华斩"
+    "description": "兵藏秘境选择乘胜"
   },
   {
     "itemName": "bcmj_skill_add2",
     "imageName": "as_bcmj_skill_add2.png",
-    "roiFront": "728,359,61,32",
+    "roiFront": "821,357,63,34",
     "roiBack": "106,356,1068,38",
     "method": "Template matching",
     "threshold": 0.8,
-    "description": "技能选择 无畏"
+    "description": "技能选择 绝命"
   },
   {
     "itemName": "bcmj_skill_add_confirm",
@@ -196,5 +196,32 @@
     "method": "Template matching",
     "threshold": 0.8,
     "description": "周一点击确认开始挑战"
+  },
+  {
+    "itemName": "bcmj_skill_add3",
+    "imageName": "as_bcmj_skill_add3.png",
+    "roiFront": "95,358,120,35",
+    "roiBack": "54,353,1160,45",
+    "method": "Template matching",
+    "threshold": 0.8,
+    "description": "技能选择 天下布武相关"
+  },
+  {
+    "itemName": "bcmj_skill_add4",
+    "imageName": "as_bcmj_skill_add4.png",
+    "roiFront": "506,356,67,41",
+    "roiBack": "57,353,1165,48",
+    "method": "Template matching",
+    "threshold": 0.8,
+    "description": "技能选择 增进"
+  },
+  {
+    "itemName": "bcmj_skill_add5",
+    "imageName": "as_bcmj_skill_add5.png",
+    "roiFront": "407,359,96,36",
+    "roiBack": "52,354,1171,45",
+    "method": "Template matching",
+    "threshold": 0.8,
+    "description": "技能选择 八华斩相关"
   }
 ]

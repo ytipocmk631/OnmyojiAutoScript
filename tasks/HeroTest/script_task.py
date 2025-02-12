@@ -1,6 +1,7 @@
 # This Python file uses the following encoding: utf-8
 # @author runhey
 # github https://github.com/runhey
+import re
 from datetime import datetime, timedelta, time
 import random  # type: ignore
 
@@ -219,6 +220,12 @@ class ScriptTask(GameUi, BaseActivity, HeroTestAssets, SwitchSoul):
                         break
                     if self.appear_then_click(self.I_BCMJ_SKILL_ADD2, interval=1):
                         break
+                    if self.appear_then_click(self.I_BCMJ_SKILL_ADD3, interval=1):
+                        break
+                    if self.appear_then_click(self.I_BCMJ_SKILL_ADD4, interval=1):
+                        break
+                    if self.appear_then_click(self.I_BCMJ_SKILL_ADD5, interval=1):
+                        break
                     if self.appear_then_click(self.I_BCMJ_BLESS, interval=1):
                         break
                     if self.appear_then_click(
@@ -259,6 +266,8 @@ class ScriptTask(GameUi, BaseActivity, HeroTestAssets, SwitchSoul):
         cu = self.O_ART_WAR_CARD_PLUS.ocr(image=self.device.image)
         # 转换为int
         if cu != "":
+            temp=re.findall(r"\d+",cu)
+            cu = temp[0]
             cu = int(cu)
         else:
             cu = 0

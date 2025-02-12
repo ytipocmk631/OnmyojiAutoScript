@@ -35,11 +35,17 @@ class HeroTestAssets:
 	I_BCMJ_BATTLE = RuleImage(roi_front=(1131,598,92,50), roi_back=(1131,598,92,50), threshold=0.8, method="Template matching", file="./tasks/HeroTest/as/as_bcmj_battle.png")
 	# 兵藏秘境胜利 
 	I_BCMJ_WIN = RuleImage(roi_front=(431,141,100,100), roi_back=(431,141,100,100), threshold=0.8, method="Template matching", file="./tasks/HeroTest/as/as_bcmj_win.png")
-	# 兵藏秘境选择八华斩 
+	# 兵藏秘境选择乘胜 
 	I_BCMJ_SKILL_ADD1 = RuleImage(roi_front=(109,361,90,32), roi_back=(103,359,1076,37), threshold=0.8, method="Template matching", file="./tasks/HeroTest/as/as_bcmj_skill_add1.png")
-	# 技能选择 无畏 
+	# 技能选择 绝命 
 	I_BCMJ_SKILL_ADD2 = RuleImage(roi_front=(728,359,61,32), roi_back=(106,356,1068,38), threshold=0.8, method="Template matching", file="./tasks/HeroTest/as/as_bcmj_skill_add2.png")
-	# 技能祝福确定 
+	#技能选择 天下布武相关
+	I_BCMJ_SKILL_ADD3 = RuleImage(roi_front=(95,358,120,35), roi_back=(54,353,1160,45), threshold=0.8, method="Template matching", file="./tasks/HeroTest/as/as_bcmj_skill_add3.png")
+	# 技能选择 增进
+	I_BCMJ_SKILL_ADD4 = RuleImage(roi_front=(506,356,67,41), roi_back=(57,353,1165,48), threshold=0.8, method="Template matching", file="./tasks/HeroTest/as/as_bcmj_skill_add4.png")
+	# 技能选择 八华斩相关
+	I_BCMJ_SKILL_ADD5 = RuleImage(roi_front=(407,359,96,36), roi_back=(52,354,1171,45), threshold=0.8, method="Template matching", file="./tasks/HeroTest/as/as_bcmj_skill_add5.png")
+	# 技能祝福确定
 	I_BCMJ_SKILL_ADD_CONFIRM = RuleImage(roi_front=(608,633,64,36), roi_back=(608,633,64,36), threshold=0.8, method="Template matching", file="./tasks/HeroTest/as/as_bcmj_skill_add_confirm.png")
 	# 兵藏秘境的暴击伤害属性奖励 
 	I_BCMJ_PROPERTY_ADD_CRITICAL = RuleImage(roi_front=(704,359,115,34), roi_back=(120,356,1038,39), threshold=0.8, method="Template matching", file="./tasks/HeroTest/as/as_bcmj_property_add_critical.png")
