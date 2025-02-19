@@ -122,7 +122,8 @@ class GameUi(BaseTask, GameUiAssets):
                     self.screenshot()
             else:
                 self.screenshot()
-
+            # 某些情况下，会不调用ui_goto而调用此函数，故在此刷新主题
+            self.refresh_costume()
             # End
             # 如果20S还没有到底，那么就抛出异常
             if timeout.reached():
