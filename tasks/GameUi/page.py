@@ -25,6 +25,8 @@ class Page:
 
     def link(self, button, destination):
         self.links[destination] = button
+    def set_check_button(self, check_button):
+        self.check_button = check_button
 
 
 #登录login

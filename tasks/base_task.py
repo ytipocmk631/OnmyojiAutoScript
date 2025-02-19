@@ -55,7 +55,8 @@ class BaseTask(GlobalGameAssets, CostumeBase):
         self.interval_timer = {}  # 这个是用来记录每个匹配的运行间隔的，用于控制运行频率
         self.animates = {}  # 保存缓存
         self.start_time = datetime.now()  # 启动的时间
-        self.check_costume(self.config.global_game.costume_config)
+        # 脚本第一次运行需要获取一次庭院主题
+        self.refresh_costume()
         # self.friend_timer = None  # 这个是用来记录勾协的时间的
         # if self.config.global_game.emergency.invitation_detect_interval:
         #     self.interval_time = self.config.global_game.emergency.invitation_detect_interval
@@ -588,6 +589,11 @@ class BaseTask(GlobalGameAssets, CostumeBase):
         """
         while 1:
             self.screenshot()
+            # 如果stop是回到庭院，那么需要刷新庭院主题
+            if stop==self.I_CHECK_MAIN:
+                self.refresh_costume()
+                # 庭院更新后重新赋值
+                stop=self.I_CHECK_MAIN
             if self.appear(stop):
                 break
             if isinstance(click, RuleImage) and self.appear_then_click(click, interval=interval):

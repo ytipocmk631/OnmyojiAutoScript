@@ -1,6 +1,7 @@
 # This Python file uses the following encoding: utf-8
 # @author runhey
 # github https://github.com/runhey
+import copy
 
 from module.atom.image import RuleImage
 from module.logger import logger
@@ -10,6 +11,10 @@ from tasks.Component.Costume.config import (MainType, CostumeConfig, RealmType,
 from tasks.Component.Costume.assets import CostumeAssets
 from tasks.Component.CostumeRealm.assets import CostumeRealmAssets
 from tasks.Component.CostumeBattle.assets import CostumeBattleAssets
+
+from tasks.GameUi.page import page_main, page_exploration, page_summon, page_town
+from tasks.GameUi.assets import GameUiAssets as G, GameUiAssets
+from tasks.Pets.assets import PetsAssets
 
 # 庭院皮肤
 main_costume_model = {
@@ -150,21 +155,57 @@ class CostumeBase:
         if not hasattr(self, asset_before):
             return
         # setattr(self, asset_before, asset_after)
-        asset_before_object: RuleImage = getattr(self, asset_before)
+        asset_before_object: RuleImage = copy.deepcopy(getattr(self, asset_before))
         asset_before_object.roi_front = asset_after.roi_front
         if rp_roi_back:
             asset_before_object.roi_back = asset_after.roi_back
         asset_before_object.threshold = asset_after.threshold
         asset_before_object.file = asset_after.file
-
-    def check_costume_main(self, main_type: MainType):
+    def flush_costume_check_btn(self,main_type,btn_type,assert_val):
+        """
+        刷新用于图像匹配的主题按钮
+        """
         if main_type == MainType.COSTUME_MAIN:
-            return
+            # 默认主题
+            # Main Home 主页
+            page_main.set_check_button(G.I_CHECK_MAIN)
+            self.I_CHECK_MAIN = G.I_CHECK_MAIN
+            # 召唤summon
+            page_main.link(button=G.I_MAIN_GOTO_SUMMON, destination=page_summon)
+            # 探索exploration
+            page_main.link(button=G.I_MAIN_GOTO_EXPLORATION, destination=page_exploration)
+            # 町中town
+            page_main.link(button=G.I_MAIN_GOTO_TOWN, destination=page_town)
+            # 宠物屋
+            self.I_PET_HOUSE = PetsAssets.I_PET_HOUSE
+
+
+            # print('默认按钮替换')
+        else:
+            # 自定义主题
+            # switch main costume to main_type
+            if btn_type == 'I_CHECK_MAIN':
+                page_main.set_check_button(assert_val)
+                self.I_CHECK_MAIN = assert_val
+            elif btn_type =='I_MAIN_GOTO_EXPLORATION':
+                page_main.link(button=assert_val, destination=page_exploration)
+            elif btn_type == 'I_MAIN_GOTO_SUMMON':
+                page_main.link(button=assert_val, destination=page_summon)
+            elif btn_type=='I_MAIN_GOTO_TOWN':
+                page_main.link(button=assert_val, destination=page_town)
+            elif btn_type=='I_PET_HOUSE':
+                self.I_PET_HOUSE = assert_val
+    def check_costume_main(self, main_type: MainType):
         logger.info(f'Switch main costume to {main_type}')
+        if main_type == MainType.COSTUME_MAIN:
+            self.flush_costume_check_btn(main_type,'',None)
+            return
+
         costume_assets = CostumeAssets()
         for key, value in main_costume_model[main_type].items():
             assert_value: RuleImage = getattr(costume_assets, value)
             self.replace_img(key, assert_value)
+            self.flush_costume_check_btn(main_type,key,assert_value)
 
     def check_costume_realm(self, realm_type: RealmType):
         if realm_type == RealmType.COSTUME_REALM_DEFAULT:
@@ -188,6 +229,26 @@ class CostumeBase:
             else:
                 self.replace_img(key, assert_value)
 
+    def refresh_costume(self):
+        """
+        用于刷新庭院皮肤
+        """
+        cos = CostumeAssets()
+        # 获取cos里的所有属性
+        self.screenshot()
+        key = '_check_main_'.upper()
+        main_type = MainType.COSTUME_MAIN
+        for i in dir(cos):
+            if key in i:
+                rule_img: RuleImage = getattr(cos, i)
+                res = self.appear(target=rule_img, interval=1)
+                if res:
+                    temp = i.split('_')
+                    temp = 'COSTUME_MAIN_' + temp[-1]
+                    main_type = MainType[temp]
+                    break
+        self.config.global_game.costume_config.costume_main_type = main_type
+        self.check_costume_main(main_type=main_type)
 
 if __name__ == '__main__':
     c = CostumeBase()

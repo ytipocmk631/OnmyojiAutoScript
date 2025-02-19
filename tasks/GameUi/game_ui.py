@@ -209,6 +209,8 @@ class GameUi(BaseTask, GameUiAssets):
                 skip_first_screenshot = False
             else:
                 self.screenshot()
+            # 刷新庭院主题，因为庭院会一直变动，所以每次跳转都需要重新获取
+            self.refresh_costume()
 
             # Destination additional button
             if destination.additional and isinstance(destination.additional, list):
