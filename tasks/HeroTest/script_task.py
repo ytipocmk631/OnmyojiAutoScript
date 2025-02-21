@@ -1,9 +1,12 @@
 # This Python file uses the following encoding: utf-8
 # @author runhey
 # github https://github.com/runhey
+import base64
 import re
 from datetime import datetime, timedelta, time
 import random  # type: ignore
+
+import cv2
 
 from tasks.Component.BaseActivity.base_activity import BaseActivity
 from tasks.HeroTest.assets import HeroTestAssets
@@ -124,11 +127,17 @@ class ScriptTask(GameUi, BaseActivity, HeroTestAssets, SwitchSoul):
                 if not self.check_art_war_card():
                     logger.info("Art war card is not enough")
                     break
+            if self.appear(self.I_GBB_FULL_LEVEL):
+                logger.info("Full level")
+                break
             # 点击战斗
             logger.info("Click battle")
             while 1:
                 self.screenshot()
                 if is_update:
+                    if self.appear(self.I_GBB_FULL_LEVEL):
+                        logger.info("Full level")
+                        break
                     if self.appear_then_click(self.I_BATTLE, interval=2):
                         self.device.stuck_record_clear()
                         continue
@@ -150,7 +159,8 @@ class ScriptTask(GameUi, BaseActivity, HeroTestAssets, SwitchSoul):
 
             if self.run_general_battle(config=config.general_battle):
                 logger.info("General battle success")
-
+        self.screenshot()
+        self.send_msg()
         self.main_home()
         self.set_next_run(task="HeroTest", success=True)
         raise TaskEnd
@@ -329,7 +339,20 @@ class ScriptTask(GameUi, BaseActivity, HeroTestAssets, SwitchSoul):
                 self.exp_50(False)
                 self.close_buff()
             break
+    def send_msg(self):
+        # bytes转base64
+        image=self.device.image
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        # 压缩一下
+        image = cv2.resize(image, (0, 0), fx=0.5, fy=0.5)
 
+        img_str=cv2.imencode('.png', image)[1].tobytes()
+        b64_code = base64.b64encode(img_str)
+        b64_code = b64_code.decode()
+        body = (f'<b>{self.config.config_name} success</b>'
+                f'<img src="data:image/png;base64,{b64_code}" alt="image" />'
+                '')
+        self.config.notifier.push_html(title='英杰试炼',content=body)
 
 
 if __name__ == "__main__":

@@ -1,6 +1,7 @@
 # This Python file uses the following encoding: utf-8
 # @author runhey
 # github https://github.com/runhey
+from email.message import EmailMessage
 
 import onepush.core
 import yaml
@@ -8,6 +9,7 @@ from onepush import get_notifier
 from onepush.core import Provider
 from onepush.exceptions import OnePushException
 from onepush.providers.custom import Custom
+from onepush.providers.smtp import SMTP, _default_message_parser
 from requests import Response
 from smtplib import SMTPResponseException
 
@@ -104,6 +106,31 @@ class Notifier:
 
         logger.info("Push notify success")
         return True
+    def push_html(self,**kwargs):
+        SMTP.set_message_parser(self.custom_parse)
+        self.push(**kwargs)
+        SMTP.set_message_parser(_default_message_parser)
 
+
+    def custom_parse(self,
+                     subject: str = '',
+                     title: str = '',
+                     content: str = '',
+                     From: str = None,
+                     user: str = None,
+                     To: str = None,
+                     **kwargs, ):
+        msg = EmailMessage()
+        # Use subject if avaliable, title for compatibility with other providers
+        msg["Subject"] = subject or title
+        # Fallback to username if `From` address not provided
+        msg["From"] = From or user
+        # Send to yourself if `To` address not provided
+        msg["To"] = To or user
+
+        msg.add_header('Content-Type', 'text/html')
+        msg.set_payload(content)
+
+        return msg
 
 

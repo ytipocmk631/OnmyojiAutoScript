@@ -223,5 +223,14 @@
     "method": "Template matching",
     "threshold": 0.8,
     "description": "技能选择 八华斩相关"
+  },
+  {
+    "itemName": "gbb_full_level",
+    "imageName": "as_gbb_full_level.png",
+    "roiFront": "172,491,29,26",
+    "roiBack": "166,486,58,36",
+    "method": "Template matching",
+    "threshold": 0.8,
+    "description": "description"
   }
 ]
