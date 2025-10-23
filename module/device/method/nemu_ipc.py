@@ -10,6 +10,7 @@ import numpy as np
 
 from module.base.decorator import cached_property, del_cached_property, has_cached_property
 from module.base.utils import ensure_time
+from module.device.connection import Connection
 from module.device.method.minitouch import insert_swipe, random_rectangle_point
 from module.device.method.utils import RETRY_TRIES, retry_sleep
 from module.exception import RequestHumanTakeover
@@ -448,7 +449,7 @@ def serial_to_id(serial: str):
         return None
 
 
-class NemuIpc():
+class NemuIpc(Connection):
     @cached_property
     def nemu_ipc(self) -> NemuIpcImpl:
         """
@@ -457,7 +458,8 @@ class NemuIpc():
         # Try existing settings first
         if self.config.script.device.emulatorinfo_path:
             folder = str(Path(self.config.script.device.emulatorinfo_path).parent.parent)
-            index = serial_to_id(self.serial)
+
+            index = serial_to_id(self.config.script.device.serial)
             if index is not None:
                 try:
                     return NemuIpcImpl(
