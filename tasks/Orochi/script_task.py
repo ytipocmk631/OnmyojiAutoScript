@@ -17,6 +17,7 @@ from tasks.Orochi.config import Orochi, UserStatus, Layer
 from module.logger import logger
 from module.exception import TaskEnd
 
+
 class ScriptTask(GeneralBattle, GeneralInvite, GeneralBuff, GeneralRoom, GameUi, SwitchSoul, OrochiAssets):
 
     def run(self) -> bool:
@@ -70,8 +71,6 @@ class ScriptTask(GeneralBattle, GeneralInvite, GeneralBuff, GeneralRoom, GameUi,
             self.set_next_run('Orochi', finish=False, success=False)
 
         raise TaskEnd
-
-
 
     def orochi_enter(self) -> bool:
         logger.info('Enter orochi')
@@ -490,6 +489,8 @@ class ScriptTask(GeneralBattle, GeneralInvite, GeneralBuff, GeneralRoom, GameUi,
                 group_team = orochi_switch_soul.eleven_switch
             case Layer.TWELVE:
                 group_team = orochi_switch_soul.twelve_switch
+            case Layer.THIRTEEN:
+                group_team = orochi_switch_soul.thirteen_switch
 
         if orochi_switch_soul.auto_switch_soul:
             self.ui_get_current_page()

@@ -6,6 +6,7 @@ from time import sleep
 from datetime import time, datetime, timedelta
 
 from exceptiongroup import catch
+from tasks.DailyTrifles.page import page_store_gift_room
 from winerror import NOERROR
 
 from tasks.GameUi.game_ui import GameUi
@@ -44,11 +45,29 @@ class ScriptTask(GameUi, Summon, DailyTriflesAssets):
     def run_one_summon(self):
         self.ui_get_current_page()
         self.ui_goto(page_summon)
-        if self.config.daily_trifles.trifles_config.summon_type == SummonType.default:
-            self.summon_one()
-        elif self.config.daily_trifles.trifles_config.summon_type == SummonType.recall:
+        config=self.config.daily_trifles.trifles_config
+        if config.summon_type == SummonType.default:
+            self.summon_one(draw_mystery_pattern=config.draw_mystery_pattern)
+            self.check_time()
+        elif config.summon_type == SummonType.recall:
             self.summon_recall()
         self.back_summon_main()
+
+    def check_time(self):
+        config = self.config.daily_trifles.trifles_config
+        now = datetime.now()
+        next_run = now + self.config.daily_trifles.scheduler.success_interval
+        # 检查是否跨月（next_run的月份与当前月份不同）
+        if next_run.month != now.month:
+            # 跨月重置神秘图案触发状态
+            if not config.draw_mystery_pattern:
+                config.draw_mystery_pattern = True
+                logger.info(
+                    f"reset draw_mystery_pattern to True, next_run: {next_run}")
+        else:
+            # 如果还是在同一月份，则没必要再绘制神秘图案
+            config.draw_mystery_pattern = False
+        self.config.save()
 
     def summon_recall(self):
         """
@@ -207,12 +226,7 @@ class ScriptTask(GameUi, Summon, DailyTriflesAssets):
 
     def run_store_sign(self):
 
-        while 1:
-            self.screenshot()
-            if self.appear(self.I_GIFT_RECOMMEND):
-                break
-            if self.appear_then_click(self.I_ROOM_GIFT, interval=1):
-                continue
+        self.ui_goto_page(page_store_gift_room)
         self.screenshot()
         self.appear_then_click(self.I_GIFT_RECOMMEND, interval=1)
         logger.info('Enter store sign')
@@ -293,4 +307,4 @@ if __name__ == '__main__':
     d = Device(c)
     t = ScriptTask(c, d)
 
-    t.run_store()
+    t.check_time()
